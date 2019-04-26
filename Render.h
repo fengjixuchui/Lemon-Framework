@@ -127,6 +127,21 @@ public:
 		I::Surface->GetTextSize(font, out, w, h);
 	}
 
+	RECT GetTextSize3(vgui::HFont font, const char* text, ...)
+	{
+		size_t origsize = strlen(text) + 1;
+		const size_t newsize = 100;
+		size_t convertedChars = 0;
+		wchar_t wcstring[newsize];
+		mbstowcs_s(&convertedChars, wcstring, origsize, text, _TRUNCATE);
+
+		RECT rect; int x, y;
+		I::Surface->GetTextSize(font, wcstring, x, y);
+		rect.left = x; rect.bottom = y;
+		rect.right = x;
+		return rect;
+	}
+
 	void ColorSpectrum(int x, int y, int w, int h)
 	{
 		static int GradientTexture = 0;
