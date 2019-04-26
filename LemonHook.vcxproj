@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <VCProjectVersion>15.0</VCProjectVersion>
+    <ProjectGuid>{CFCC44B7-8EBF-4700-83B3-449FF7F3EA5E}</ProjectGuid>
+    <RootNamespace>LemonHook</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>false</ConformanceMode>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <SDLCheck>true</SDLCheck>
+      <ConformanceMode>true</ConformanceMode>
+    </ClCompile>
+    <Link>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="Chams.h" />
+    <ClInclude Include="Cheat.h" />
+    <ClInclude Include="Features.h" />
+    <ClInclude Include="Font.h" />
+    <ClInclude Include="Glow.h" />
+    <ClInclude Include="GUI.h" />
+    <ClInclude Include="Helpers\input.hpp" />
+    <ClInclude Include="Helpers\math.hpp" />
+    <ClInclude Include="Helpers\utils.hpp" />
+    <ClInclude Include="Helpers\vfunc_hook.hpp" />
+    <ClInclude Include="Hooks.h" />
+    <ClInclude Include="ILocalize.h" />
+    <ClInclude Include="Menu.h" />
+    <ClInclude Include="Render.h" />
+    <ClInclude Include="Settings.h" />
+    <ClInclude Include="Valve_SDK\csgostructs.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\CClientState.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\CInput.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IAppSystem.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IBaseClientDll.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IClientEntity.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IClientEntityList.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IClientMode.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IClientNetworkable.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IClientRenderable.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IClientThinkable.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IClientUnknown.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\ICollideable.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IConVar.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\ICvar.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IEngineSound.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IEngineTrace.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IGameEventmanager.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IInputSystem.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IMaterialSystem.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IMDLCache.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IMoveHelper.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IPanel.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IPhysics.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IPrediction.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IRefCounted.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IRenderView.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\ISurface.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IVDebugOverlay.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IVEngineClient.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IViewRender.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IVModelInfoClient.hpp" />
+    <ClInclude Include="Valve_SDK\interfaces\IVModelRender.hpp" />
+    <ClInclude Include="Valve_SDK\math\QAngle.hpp" />
+    <ClInclude Include="Valve_SDK\math\Vector.hpp" />
+    <ClInclude Include="Valve_SDK\math\Vector2D.hpp" />
+    <ClInclude Include="Valve_SDK\math\Vector4D.hpp" />
+    <ClInclude Include="Valve_SDK\math\VMatrix.hpp" />
+    <ClInclude Include="Valve_SDK\misc\BaseHandle.hpp" />
+    <ClInclude Include="Valve_SDK\misc\characterset.hpp" />
+    <ClInclude Include="Valve_SDK\misc\checksum_crc.hpp" />
+    <ClInclude Include="Valve_SDK\misc\checksum_md5.hpp" />
+    <ClInclude Include="Valve_SDK\misc\ClientClass.hpp" />
+    <ClInclude Include="Valve_SDK\misc\Color.hpp" />
+    <ClInclude Include="Valve_SDK\misc\Convar.hpp" />
+    <ClInclude Include="Valve_SDK\misc\CUserCmd.hpp" />
+    <ClInclude Include="Valve_SDK\misc\datamap.hpp" />
+    <ClInclude Include="Valve_SDK\misc\EHandle.hpp" />
+    <ClInclude Include="Valve_SDK\misc\Enums.hpp" />
+    <ClInclude Include="Valve_SDK\misc\GlobalVars.hpp" />
+    <ClInclude Include="Valve_SDK\misc\glow_outline_effect.hpp" />
+    <ClInclude Include="Valve_SDK\misc\IHandleEntity.hpp" />
+    <ClInclude Include="Valve_SDK\misc\platform.hpp" />
+    <ClInclude Include="Valve_SDK\misc\Recv.hpp" />
+    <ClInclude Include="Valve_SDK\misc\Studio.hpp" />
+    <ClInclude Include="Valve_SDK\misc\UtlBuffer.hpp" />
+    <ClInclude Include="Valve_SDK\misc\UtlMemory.hpp" />
+    <ClInclude Include="Valve_SDK\misc\UtlString.hpp" />
+    <ClInclude Include="Valve_SDK\misc\UtlVector.hpp" />
+    <ClInclude Include="Valve_SDK\misc\vfunc.hpp" />
+    <ClInclude Include="Valve_SDK\netvars.hpp" />
+    <ClInclude Include="Valve_SDK\SDK.h" />
+    <ClInclude Include="Valve_SDK\sdk.hpp" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamapplist.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamapps.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamappticket.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamclient.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamcontroller.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamfriends.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamgamecoordinator.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamgameserver.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamgameserverstats.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamhtmlsurface.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamhttp.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteaminventory.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteammasterserverupdater.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteammatchmaking.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteammusic.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteammusicremote.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamnetworking.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamparentalsettings.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamps3overlayrenderer.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamremotestorage.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamscreenshots.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamugc.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamuser.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamuserstats.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamutils.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\isteamvideo.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\matchmakingtypes.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\steamclientpublic.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\steamencryptedappticket.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\steamhttpenums.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\steamps3params.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\steamtypes.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\steamuniverse.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\steam_api.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\steam_api_flat.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\steam_api_internal.h" />
+    <ClInclude Include="Valve_SDK\Steamworks\steam_gameserver.h" />
+    <ClInclude Include="PlayerVisuals.h" />
+    <ClInclude Include="WorldVisuals.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Valve_SDK\Steamworks\steam_api.json" />
+    <None Include="Valve_SDK\Steamworks\steam_api_interop.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Chams.cpp" />
+    <ClCompile Include="Checkbox.cpp" />
+    <ClCompile Include="Colorpicker.cpp" />
+    <ClCompile Include="Control.cpp" />
+    <ClCompile Include="DllMain.cpp" />
+    <ClCompile Include="Dropdown.cpp" />
+    <ClCompile Include="Font.cpp" />
+    <ClCompile Include="Glow.cpp" />
+    <ClCompile Include="Groupbox.cpp" />
+    <ClCompile Include="GUI.cpp" />
+    <ClCompile Include="Helpers\input.cpp" />
+    <ClCompile Include="Helpers\math.cpp" />
+    <ClCompile Include="Helpers\utils.cpp" />
+    <ClCompile Include="Helpers\vfunc_hook.cpp" />
+    <ClCompile Include="Hooks.cpp" />
+    <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="Render.cpp" />
+    <ClCompile Include="Settings.cpp" />
+    <ClCompile Include="Tab.cpp" />
+    <ClCompile Include="Valve_SDK\csgostructs.cpp" />
+    <ClCompile Include="Valve_SDK\math\Vector2D.cpp" />
+    <ClCompile Include="Valve_SDK\math\Vector4D.cpp" />
+    <ClCompile Include="Valve_SDK\math\VMatrix.cpp" />
+    <ClCompile Include="Valve_SDK\misc\characterset.cpp" />
+    <ClCompile Include="Valve_SDK\misc\checksum_crc.cpp" />
+    <ClCompile Include="Valve_SDK\misc\checksum_md5.cpp" />
+    <ClCompile Include="Valve_SDK\misc\Color.cpp" />
+    <ClCompile Include="Valve_SDK\misc\Convar.cpp" />
+    <ClCompile Include="Valve_SDK\misc\UtlBuffer.cpp" />
+    <ClCompile Include="Valve_SDK\misc\UtlString.cpp" />
+    <ClCompile Include="Valve_SDK\netvars.cpp" />
+    <ClCompile Include="Valve_SDK\sdk.cpp" />
+    <ClCompile Include="PlayerVisuals.cpp" />
+    <ClCompile Include="WorldVisuals.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
