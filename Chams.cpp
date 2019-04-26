@@ -66,9 +66,9 @@ CChams::CChams()
 	{
 		"sine"
 		{
-			"sineperiod"    0.8
-			"sinemin"		0
-			"sinemax"		0.8
+			"sineperiod"    0.9
+			"sinemin"		0.2
+			"sinemax"		0.5
 			"resultvar"     "$color"
 		}
 	}
@@ -84,9 +84,9 @@ CChams::CChams()
 	{
 		"sine"
 		{
-			"sineperiod"    0.8
-			"sinemin"		0
-			"sinemax"		0.8
+			"sineperiod"    0.9
+			"sinemin"		0.2
+			"sinemax"		0.5
 			"resultvar"     "$color"
 		}
 	}
