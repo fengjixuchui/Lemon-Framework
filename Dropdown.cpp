@@ -136,7 +136,7 @@ void CDropdown::Update()
 	}
 
 	rect_t fullArea = rect_t(area.x, area.y + heightOffset, area.w, area.h + (items.size() * 19));
-	if (CMenu::Get().KeyPress(VK_LBUTTON) && fullArea.ContainsPoint(mouse))
+	if (CMenu::Get().KeyPress(VK_LBUTTON) && !fullArea.ContainsPoint(mouse))
 	{
 		open = false;
 		parent->ResetBlock();
