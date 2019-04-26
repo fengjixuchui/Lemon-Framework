@@ -3,6 +3,7 @@
 #include "Menu.h"
 #include "GUI.h"
 #include <intrin.h>
+#include "ConfigManager.h"
 #pragma intrinsic(_ReturnAddress)  
 
 void CorrectMovement(QAngle vOldAngles, CUserCmd* pCmd, float fOldForward, float fOldSidemove);
@@ -19,6 +20,7 @@ namespace Hooks
 	vfunc_hook sv_cheats;
 	vfunc_hook renderview_hook;
 	vfunc_hook matchmaking_hook;
+	vfunc_hook event_hook;
 
 	void Initialize()
 	{
@@ -31,6 +33,7 @@ namespace Hooks
 		clientmode_hook.setup(I::ClientMode);
 		renderview_hook.setup(I::RenderView);
 		matchmaking_hook.setup(I::SteamMatchmaking);
+		event_hook.setup(I::GameEvents);
 		ConVar* sv_cheats_con = I::CVar->FindVar("sv_cheats");
 		sv_cheats.setup(sv_cheats_con);
 
@@ -49,6 +52,8 @@ namespace Hooks
 
 		clientmode_hook.hook_index(index::DoPostScreenSpaceEffects, hkDoPostScreenEffects);
 		clientmode_hook.hook_index(index::OverrideView, hkOverrideView);
+
+		event_hook.hook_index(index::FireEventClientSide, hkFireEventClientSideThink);
 
 		sv_cheats.hook_index(index::SvCheatsGetBool, hkSvCheatsGetBool);
 
@@ -182,6 +187,9 @@ namespace Hooks
 			//Draw calls here
 			CMenu::Get().Update();
 			CPlayerVisuals::Get().OnPaintTraverse();
+			CWorldVisuals::Get().OnPaintTraverse();
+
+			cfgManager->ConfigFiles();
 		}
 	}
 	//--------------------------------------------------------------------------------
@@ -277,6 +285,13 @@ namespace Hooks
 
 		I::MdlRender->ForcedMaterialOverride(nullptr);
 	}
+
+	bool __fastcall hkFireEventClientSideThink(void* ecx, void* edx, IGameEvent* pEvent)
+	{
+		static auto oFireEventClientSide = event_hook.get_original<FireEventClientSide>(index::FireEventClientSide);
+
+		return oFireEventClientSide(ecx, pEvent);
+	};
 
 	auto dwCAM_Think = U::PatternScan(GetModuleHandleW(L"client_panorama.dll"), "85 C0 75 30 38 86");
 	typedef bool(__thiscall *svc_get_bool_t)(PVOID);

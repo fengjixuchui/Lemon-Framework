@@ -20,6 +20,7 @@ namespace index
 	constexpr auto OverrideView = 18;
 	constexpr auto LockCursor = 67;
 	constexpr auto SendLobbyChatMessage = 26;
+	constexpr auto FireEventClientSide = 9;
 }
 
 namespace Hooks
@@ -28,6 +29,7 @@ namespace Hooks
 	void Shutdown();
 
 	extern vfunc_hook hlclient_hook;
+	extern vfunc_hook event_hook;
 	extern vfunc_hook direct3d_hook;
 	extern vfunc_hook vguipanel_hook;
 	extern vfunc_hook vguisurf_hook;
@@ -47,8 +49,9 @@ namespace Hooks
 	using PlaySound = void(__thiscall*)(ISurface*, const char* name);
 	using LockCursor_t = void(__thiscall*)(ISurface*);
 	using DrawModelExecute = void(__thiscall*)(IVModelRender*, IMatRenderContext*, const DrawModelState_t&, const ModelRenderInfo_t&, matrix3x4_t*);
-	using FireEvent = bool(__thiscall*)(IGameEventManager2*, IGameEvent* pEvent);
+	using FireEventClientSide = bool(__thiscall*)(void*, IGameEvent*);
 	using DoPostScreenEffects = int(__thiscall*)(IClientMode*, int);
+	using FireEvent = bool(__thiscall*)(IGameEventManager2*, IGameEvent* pEvent);
 	using OverrideView = void(__thiscall*)(IClientMode*, CViewSetup*);
 
 	using iSceneEnd = void(__fastcall*)(void*, void*);
@@ -69,4 +72,5 @@ namespace Hooks
 	int  __stdcall hkDoPostScreenEffects(int a1);
 	bool __fastcall hkSvCheatsGetBool(PVOID pConVar, void* edx);
 	bool __stdcall hkSendLobbyChatMessage(CSteamID steamIdLobby, const void* pvMsgBody, int cubMsgBody);
+	bool __fastcall hkFireEventClientSideThink(void * ecx, void * edx, IGameEvent * pEvent);
 }
