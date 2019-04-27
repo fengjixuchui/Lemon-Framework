@@ -184,39 +184,42 @@ void CGroupbox::Update(rect_t mparent_area)
 
 			if (current->flags.size())
 			{
-				for (int j = current->flags.size() - 1; i >= 0; j--)
+				for (int j = current->flags.size() - 1; j >= 0; j--)
 				{
 					auto & flag = current->flags.at(j);
 
 					rect_t flbFlagRect = flag->area;
-
-					flag->area = rect_t(area.x + flag->area.x,
+					flag->area = rect_t(
+						area.x + flag->area.x,
 						area.y + flag->area.y,
 						flag->area.w,
-						flag->area.h);
+						flag->area.h
+					);
 
-					if (!parent->blockInput || flag == parent->overridingFlag)
-					{
+					//Update Flags
+					if (!parent->blockInput ||  flag == parent->overridingFlag)
 						flag->Update();
-					}
 
 					flag->Draw();
 
-					if (!parent->blockInput || flag == parent->overridingFlag)
-					{
+					if (!parent->blockInput || flag == parent->overridingFlag) {
 						POINT mouse; GetCursorPos(&mouse);
 
-						if (flag->area.ContainsPoint(mouse))
-						{
-							if (CMenu::Get().KeyPress(VK_LBUTTON))
-								flag->Click();
+						if (flag->area.ContainsPoint(mouse)) {
+							if (CMenu::Get().KeyPress(VK_LBUTTON)) {
+								flag->LClick();
+							}
 						}
 					}
 
 					flag->area = flbFlagRect;
 				}
+
 			}
+
+			current->area = flb_rect;
 		}
+
 
 		current->area = flb_rect;
 	}
