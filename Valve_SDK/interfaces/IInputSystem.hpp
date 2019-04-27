@@ -252,4 +252,10 @@ public:
 		typedef int(__thiscall* OriginalFn)(void*, ButtonCode_t);
 		return CallVFunction< OriginalFn >(this, 46)(this, code);
 	}
+
+	const char* ButtonCodeToString(ButtonCode_t code)
+	{
+		typedef const char*(__thiscall* OriginalFn)(void*, ButtonCode_t);
+		return CallVFunction<OriginalFn>(this, 40)(this, code);
+	}
 };
