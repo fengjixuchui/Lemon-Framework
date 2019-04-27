@@ -1,9 +1,122 @@
-#include "GUI.h"
+#include "Cheat.h"
 
-CColorpicker::CColorpicker(Color * n_color, std::string n_label /* = "" */)
-{
-	area.w = 15;
-	area.h = 8;
+void spectrum(int x, int y, int w, int h) {
+	static int GradientTexture = 0;
+	static std::unique_ptr<Color[]> Gradient = nullptr;
+	if (!Gradient) {
+		Gradient = std::make_unique<Color[]>(w * h);
+
+		for (int i = 0; i < w; i++) {
+			int div = w / 6;
+			int phase = i / div;
+			float t = (i % div) / (float)div;
+			int r, g, b;
+
+			switch (phase) {
+			case(0):
+				r = 255;
+				g = 255 * t;
+				b = 0;
+				break;
+			case(1):
+				r = 255 * (1.f - t);
+				g = 255;
+				b = 0;
+				break;
+			case(2):
+				r = 0;
+				g = 255;
+				b = 255 * t;
+				break;
+			case(3):
+				r = 0;
+				g = 255 * (1.f - t);
+				b = 255;
+				break;
+			case(4):
+				r = 255 * t;
+				g = 0;
+				b = 255;
+				break;
+			case(5):
+				r = 255;
+				g = 0;
+				b = 255 * (1.f - t);
+				break;
+			}
+
+			for (int k = 0; k < h; k++) {
+				float sat = k / (float)h;
+				int _r = r + sat * (128 - r);
+				int _g = g + sat * (128 - g);
+				int _b = b + sat * (128 - b);
+
+				*reinterpret_cast<Color*>(Gradient.get() + i + k * w) = Color(_r, _g, _b);
+			}
+		}
+
+		GradientTexture = I::Surface->CreateNewTextureID(true);
+		I::Surface->DrawSetTextureRGBA(GradientTexture, (unsigned char*)Gradient.get(), w, h);
+	}
+
+	I::Surface->DrawSetColor(Color(255, 255, 255, 255));
+	I::Surface->DrawSetTexture(GradientTexture);
+	I::Surface->DrawTexturedRect(x, y, x + w, y + h);
+}
+
+auto color_from_pen(int x, int y, int w, int h, Vector2D mouse) -> Color {
+	int div = w / 6;
+	int phase = mouse.x / div;
+	float t = ((int)mouse.x % div) / (float)div;
+	int r, g, b;
+
+	switch (phase) {
+	case(0):
+		r = 255;
+		g = 255 * t;
+		b = 0;
+		break;
+	case(1):
+		r = 255 * (1.f - t);
+		g = 255;
+		b = 0;
+		break;
+	case(2):
+		r = 0;
+		g = 255;
+		b = 255 * t;
+		break;
+	case(3):
+		r = 0;
+		g = 255 * (1.f - t);
+		b = 255;
+		break;
+	case(4):
+		r = 255 * t;
+		g = 0;
+		b = 255;
+		break;
+	case(5):
+		r = 255;
+		g = 0;
+		b = 255 * (1.f - t);
+		break;
+	}
+
+	float sat = mouse.y / h;
+
+	int rgb[3] = {
+		r + sat * (128 - r),
+		g + sat * (128 - g),
+		b + sat * (128 - b)
+	};
+
+	return Color(rgb[0], rgb[1], rgb[2], 255);
+}
+
+CColorpicker::CColorpicker(Color * n_color, std::string n_label) {
+	area.w = 30;
+	area.h = 10;
 
 	parent = config.lastGroup;
 	preview_color = n_color;
@@ -13,9 +126,9 @@ CColorpicker::CColorpicker(Color * n_color, std::string n_label /* = "" */)
 	brightness = 1.0f;
 }
 
-void CColorpicker::Draw()
-{
+void CColorpicker::Draw() {
 	Render.FilledRect(area.x, area.y, area.w, area.h, *preview_color);
+	Render.GradientVertical(area.x, area.y, area.w, area.h, Color(0, 0, 0, 0), Color(0, 0, 0, 65));
 	Render.OutlinedRect(area.x, area.y, area.w, area.h, Color::Black);
 
 	rect_t n_area = rect_t(
@@ -23,8 +136,7 @@ void CColorpicker::Draw()
 		234, 254
 	);
 
-	if (open)
-	{
+	if (open) {
 		Render.FilledRect(n_area.x, n_area.y, n_area.w, n_area.h, Color{ 25, 25, 25 });
 		Render.OutlinedRect(n_area.x, n_area.y, n_area.w, n_area.h, Color::Black);
 
@@ -34,7 +146,7 @@ void CColorpicker::Draw()
 			n_area.w - 10,
 			n_area.h - 10
 		);
-		
+
 		Render.FilledRect(n_area.x, n_area.y, n_area.w, n_area.h, Color{ 35, 35, 35, 255 });
 		Render.OutlinedRect(n_area.x, n_area.y, n_area.w, n_area.h, Color::Black);
 
@@ -45,7 +157,7 @@ void CColorpicker::Draw()
 			n_area.h - 28
 		);
 
-		Render.ColorSpectrum(n_area.x, n_area.y, 216, 216);
+		spectrum(n_area.x, n_area.y, 216, 216);
 		Render.OutlinedRect(n_area.x, n_area.y, n_area.w, n_area.h, Color::Black);
 
 		rect_t slider_area = rect_t(
@@ -77,8 +189,7 @@ void CColorpicker::Draw()
 	}
 }
 
-void CColorpicker::Update()
-{
+void CColorpicker::Update() {
 	auto recalculate_color = [this]() -> void {
 		float new_brightness = 2.0f - brightness;
 
@@ -152,14 +263,13 @@ void CColorpicker::Update()
 	}
 
 	if (GetAsyncKeyState(VK_LBUTTON) && open_area.ContainsPoint(mouse) && !dragging) {
-		color = Render.ColorFromPen(open_area.x, open_area.y, 216, 216, Vector2D(mouse.x - open_area.x, mouse.y - open_area.y));
+		color = color_from_pen(open_area.x, open_area.y, 216, 216, Vector2D(mouse.x - open_area.x, mouse.y - open_area.y));
 
 		recalculate_color();
 	}
 }
 
-void CColorpicker::Click()
-{
+void CColorpicker::LClick() {
 	if (open) {
 		parent->ResetBlock();
 	}
