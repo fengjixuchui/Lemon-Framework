@@ -4,8 +4,14 @@
 class CMisc : public Singleton<CMisc>
 {
 public:
-	void ChangeName();
-	void ChangeClantag();
+	void OnCreateMove(CUserCmd* cmd);
+	void ChangeName();						//we need these here because in the menu we are intializing it as an object
+	void ChangeClantagStatic();
+private:
 
-	void Clantag();
+	void BunnyHop(CUserCmd* cmd);
+	void ChatSpammer();
+	void FOVOverride();
+	void RevealCompetivieRanksOnScoreboard();
+
 };
