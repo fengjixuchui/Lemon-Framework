@@ -1,5 +1,5 @@
 #include "Misc.h"
-
+#include "Valve_SDK/math/Vector.hpp"
 void CMisc::OnCreateMove(CUserCmd* cmd)
 {
 	if (!I::Engine->IsConnected() && !I::Engine->IsInGame())
@@ -7,10 +7,22 @@ void CMisc::OnCreateMove(CUserCmd* cmd)
 	if (!G::LocalPlayer)
 		return;
 
-	if (config.misc.Bunnyhop)
+	if (config.misc.bBunnyhop)
 		this->BunnyHop(cmd);
-	if (config.misc.ChatSpam != 0)
+	if (config.misc.iChatType != 0)
 		this->ChatSpammer();
+	if (config.misc.bRevealCompetitiveRanks)
+		this->RevealCompetivieRanksOnScoreboard();
+	if (config.misc.bAirDuck) //not done
+		this->DuckJump(cmd);
+	if (config.misc.bEdgeJump)
+		this->EdgeJump(cmd);
+	if (config.misc.bAutomaticWeapons) //not done
+		this->AutomaticWeapons(cmd);
+	if (config.misc.bAirStrafe)
+		this->AutoStrafer(cmd);
+	if (config.misc.iClanTagSelection != 0)
+		this->AnimatedClanTagChanger(cmd);
 }
 
 
@@ -93,6 +105,8 @@ void CMisc::ChangeClantagStatic()
 	U::SetClantag(config.misc.customClantag.c_str());
 }
 
+
+
 void CMisc::BunnyHop(CUserCmd * cmd)
 {
 	static bool Did_Jump_Last_Tick = false;
@@ -133,7 +147,7 @@ auto say = "say """;
 void CMisc::ChatSpammer()
 {
 
-	if (config.misc.iChatType == 0)
+	if (config.misc.iChatType == 1)
 	{
 		
 		if (GetTickCount() - LastSpammed > 800)
@@ -143,7 +157,7 @@ void CMisc::ChatSpammer()
 			I::Engine->ExecuteClientCmd(msg.c_str());
 		}
 	}
-	else if (config.misc.iChatType == 1)
+	else if (config.misc.iChatType == 2)
 	{
 		
 		if (GetTickCount() - LastSpammed > 800)
@@ -155,7 +169,7 @@ void CMisc::ChatSpammer()
 	}
 	else
 	{
-		if (config.misc.iChatType == 2)
+		if (config.misc.iChatType == 3)
 		{
 			
 			if (GetTickCount() - LastSpammed > 800)
@@ -171,12 +185,149 @@ void CMisc::ChatSpammer()
 
 }
 
+void CMisc::DuckJump(CUserCmd* cmd)
+{
+	if (cmd->buttons | IN_JUMP)
+	{
+		cmd->buttons |= IN_DUCK;
+	}
+}
+
 void CMisc::FOVOverride()
 {
+	//done in hooks
+}
 
+
+void CMisc::RevealCompetivieRanksOnScoreboard()
+{
+	U::RankRevealAll();
+}
+
+
+void CMisc::EdgeJump(CUserCmd* cmd)
+{
+	if (G::LocalPlayer->m_nMoveType() == MOVETYPE_LADDER || G::LocalPlayer->m_nMoveType() == MOVETYPE_NOCLIP)
+		return;
+	Vector Start, End;
+	Start = G::LocalPlayer->m_vecOrigin();
+	M::VectorCopy(G::LocalPlayer->m_vecOrigin(), Start);
+	M::VectorCopy(Start, End);
+	End.z -= 32;
+	Ray_t ray;
+	ray.Init(Start, End);
+	trace_t trace;
+	CTraceFilter filter;
+	filter.pSkip = G::LocalPlayer;
+	I::EngineTrace->TraceRay(ray, MASK_PLAYERSOLID_BRUSHONLY, &filter, &trace);
+	if (trace.fraction == 1.0f)
+	{
+		cmd->buttons |= IN_JUMP;
+	}
+}
+
+
+int Helpers::GetTickBase(CUserCmd* cmd)
+{
+	static int g_tick = 0;
+	static CUserCmd* g_pLastCmd = nullptr;
+
+	if (!cmd)
+		return g_tick;
+
+	if (!g_pLastCmd || g_pLastCmd->hasbeenpredicted) {
+		g_tick = G::LocalPlayer->m_nTickBase();
+	}
+	else {
+		//required due to csgo being dumb and running predicition every tick and not ig sec ~ MemZ
+		++g_tick;
+	}
+
+	g_pLastCmd = cmd;
+	return g_tick;
+}
+
+void CMisc::AutomaticWeapons(CUserCmd* cmd)
+{
+	if (!G::LocalPlayer)
+		return;
+	C_BaseCombatWeapon* local_weapon = G::LocalPlayer->m_hActiveWeapon().Get();
+	if (!local_weapon)
+		return;
+	if (!local_weapon->IsPistol())					//FIX THIS
+		return;
+	float currenttime = G::LocalPlayer->m_nTickBase() * I::GlobalVars->interval_per_tick;
+	if (currenttime >= local_weapon->m_flNextPrimaryAttack() && currenttime >= local_weapon->m_flNextPrimaryAttack())
+		return;
+	cmd->buttons &= (local_weapon->m_iItemDefinitionIndex() == WEAPON_REVOLVER ? IN_ATTACK2 : IN_ATTACK);
+}
+
+
+
+void CMisc::AutoStrafer(CUserCmd* cmd)
+{
+	if (G::LocalPlayer->m_nMoveType() == MOVETYPE_LADDER || MOVETYPE_NOCLIP || !G::LocalPlayer->IsAlive())
+		return;
+	if (I::InputSystem->IsButtonDown(ButtonCode_t::KEY_SPACE) ||
+		I::InputSystem->IsButtonDown(ButtonCode_t::KEY_A) ||					// If we're not jumping or want to manually move out of the way/jump over an obstacle don't strafe ~MemZ
+		I::InputSystem->IsButtonDown(ButtonCode_t::KEY_D) ||
+		I::InputSystem->IsButtonDown(ButtonCode_t::KEY_S) ||
+		I::InputSystem->IsButtonDown(ButtonCode_t::KEY_W))
+		return;
+	if (!(G::LocalPlayer->m_fFlags() & FL_ONGROUND))
+	{
+		if (cmd->mousedx > 1 || cmd->mousedx < -1)
+		{
+			cmd->sidemove = clamp(cmd->mousedx < 0.f ? -400.f : 400.f, -400, 400);
+		}
+		else
+		{
+			if (G::LocalPlayer->m_vecVelocity().Length2D() == 0 || G::LocalPlayer->m_vecVelocity().Length2D() == NAN || G::LocalPlayer->m_vecVelocity().Length2D() == INFINITE)
+			{
+				cmd->forwardmove = 400;
+				return;
+			}
+			cmd->forwardmove = clamp(5850.f / G::LocalPlayer->m_vecVelocity().Length2D(), -400, 400);
+			if (cmd->forwardmove < -400 || cmd->forwardmove > 400)
+				cmd->forwardmove = 0;
+			cmd->sidemove = clamp((cmd->command_number % 2) == 0 ? -400.f : 400.f, -400, 400);
+			if (cmd->sidemove < -400 || cmd->sidemove > 400)
+				cmd->sidemove = 0;
+		}
+	}
 }
 
 
 
 
+void CMisc::AnimatedClanTagChanger(CUserCmd* cmd)
+{
+	std::string tag = "www.LEMON-HOOK.xqz";
 
+	if (!I::Engine->IsInGame())
+		return;
+	
+	static size_t lastime = 0;
+
+	if (config.misc.iClanTagSelection == 1)
+	{
+		if (GetTickCount() > lastime)
+		{
+			tag += tag.at(0);
+			tag.erase(0, 1);
+			Helpers::Get().marquee(tag);
+			U::SetClantag(tag.c_str());
+			lastime = GetTickCount() + 650;
+		}
+	}
+
+
+}
+
+
+void Helpers::marquee(std::string& tempstring)
+{
+	std::string temp_string = tempstring;
+	tempstring.erase(0, 1);
+	tempstring += temp_string[0];
+}
