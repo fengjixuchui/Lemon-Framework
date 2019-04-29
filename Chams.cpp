@@ -61,15 +61,17 @@ CChams::CChams()
 	std::ofstream("csgo\\materials\\simple_pulse.vmt") << R"#("UnlitGeneric"
 {
 	"$additive"  "1"
-	
+	"$nofog"     "1"
+	"$flat"      "0"
+	"$selfillum"    "1"
 	"proxies"
 	{
 		"sine"
 		{
-			"sineperiod"    0.9
-			"sinemin"		0.2
-			"sinemax"		0.5
-			"resultvar"     "$color"
+			"sineperiod"    1.0
+			"sinemin"		0.4
+			"sinemax"		0.8
+			"resultvar"     "$alpha"
 		}
 	}
 }
@@ -78,16 +80,19 @@ CChams::CChams()
 	std::ofstream("csgo\\materials\\simple_pulse_ignorez.vmt") << R"#("UnlitGeneric"
 {
 	"$additive"  "1"
-	"$ignorez"      "1"
-	
+	"$ignorez"   "1"
+	"$additive"  "1"
+	"$nofog"     "1"
+	"$flat"      "0"
+	"$selfillum"    "1"
 	"proxies"
 	{
 		"sine"
 		{
-			"sineperiod"    0.9
-			"sinemin"		0.2
-			"sinemax"		0.5
-			"resultvar"     "$color"
+			"sineperiod"    1.0
+			"sinemin"		0.4
+			"sinemax"		0.8
+			"resultvar"     "$alpha"
 		}
 	}
 }
@@ -172,23 +177,61 @@ void CChams::DME(IMatRenderContext* ctx, const DrawModelState_t &state, const Mo
 		{
 			const auto enemy = entity->m_iTeamNum() != G::LocalPlayer->m_iTeamNum();
 
-			switch (config.visuals.iPlayerChamsType)
+			if (!enemy)
+				return;
+
+
+			if (!config.visuals.bChamsInvis)
 			{
-			case 0:
-				OverrideMaterial(config.visuals.bChamsInvis, false, false, false, false, config.visuals.cPlayerChamsVis);
-				break;
-			case 1:
-				OverrideMaterial(config.visuals.bChamsInvis, true, false, false, false, config.visuals.cPlayerChamsVis);
-				break;
-			case 2:
-				OverrideMaterial(config.visuals.bChamsInvis, false, true, false, false, config.visuals.cPlayerChamsVis);
-				break;
-			case 3:
-				OverrideMaterial(config.visuals.bChamsInvis, false, false, true, false, config.visuals.cPlayerChamsVis);
-				break;
-			case 4:
-				OverrideMaterial(config.visuals.bChamsInvis, false, false, false, true, config.visuals.cPlayerChamsVis);
-				break;
+				switch (config.visuals.iPlayerChamsType)
+				{
+				case 0:
+					OverrideMaterial(false, false, false, false, false, config.visuals.cPlayerChamsVis);
+					break;
+				case 1:
+					OverrideMaterial(false, true, false, false, false, config.visuals.cPlayerChamsVis);
+					break;
+				case 2:
+					OverrideMaterial(false, false, true, false, false, config.visuals.cPlayerChamsVis);
+					break;
+				case 3:
+					OverrideMaterial(false, false, false, true, false, config.visuals.cPlayerChamsVis);
+					break;
+				case 4:
+					OverrideMaterial(false, false, false, false, true, config.visuals.cPlayerChamsVis);
+					break;
+				}
+			}
+			else
+			{
+				switch (config.visuals.iPlayerChamsType)
+				{
+				case 0:
+					OverrideMaterial(true, false, false, false, false, config.visuals.cPlayerChamsInvis);
+					fnDME(I::MdlRender, ctx, state, pInfo, pCustomBoneToWorld);
+					OverrideMaterial(false, false, false, false, false, config.visuals.cPlayerChamsVis);
+					break;
+				case 1:
+					OverrideMaterial(true, true, false, false, false, config.visuals.cPlayerChamsInvis);
+					fnDME(I::MdlRender, ctx, state, pInfo, pCustomBoneToWorld);
+					OverrideMaterial(false, true, false, false, false, config.visuals.cPlayerChamsVis);
+					break;
+				case 2:
+					OverrideMaterial(true, false, true, false, false, config.visuals.cPlayerChamsInvis);
+					fnDME(I::MdlRender, ctx, state, pInfo, pCustomBoneToWorld);
+					OverrideMaterial(false, false, true, false, false, config.visuals.cPlayerChamsVis);
+					break;
+				case 3:
+					OverrideMaterial(true, false, false, true, false, config.visuals.cPlayerChamsInvis);
+					fnDME(I::MdlRender, ctx, state, pInfo, pCustomBoneToWorld);
+					OverrideMaterial(false, false, false, true, false, config.visuals.cPlayerChamsVis);
+					break;
+				case 4:
+					OverrideMaterial(true, false, false, false, true, config.visuals.cPlayerChamsInvis);
+					fnDME(I::MdlRender, ctx, state, pInfo, pCustomBoneToWorld);
+					OverrideMaterial(false, false, false, false, true, config.visuals.cPlayerChamsVis);
+					break;
+				}
 			}
 		}
 		else if (entity == G::LocalPlayer && config.visuals.bLocalChamsReal)
